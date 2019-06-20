@@ -49,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void displayNote(Spinner spinnerCourses, EditText textNoteText, EditText textNoteTitle) {
+    private void displayNote(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
         int courseIndex = courses.indexOf(mNote.getCourse());
         spinnerCourses.setSelection(courseIndex);
-        textNoteText.setText(mNote.getText());
         textNoteTitle.setText(mNote.getTitle());
+        textNoteText.setText(mNote.getText());
     }
 
     private void readDisplayStateValues() {
@@ -93,12 +93,12 @@ public class MainActivity extends AppCompatActivity {
     private void sendEmail() {
          CourseInfo course = (CourseInfo) mSpinnerCourses.getSelectedItem();
          String subject = mTextNoteTitle.getText().toString();
-         String text = "Check out this email. Its fantastic \" \n" +
+         String text = "Check out this email. Its fantastic \n\"" +
                  course.getTitle() + "\"\n" + mTextNoteText.getText().toString();
 
          Intent intent = new Intent(Intent.ACTION_SEND);
          intent.setType("message/rfc2822");
-         intent.putExtra(Intent.EXTRA_TEXT,subject);
+         intent.putExtra(Intent.EXTRA_SUBJECT,subject);
          intent.putExtra(Intent.EXTRA_TEXT,text);
          startActivity(intent);
     }
