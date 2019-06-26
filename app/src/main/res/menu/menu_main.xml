@@ -5,6 +5,6 @@
     <item
         android:id="@+id/action_send_mail"
         android:orderInCategory="100"
-        android:title="Send as email"
+        android:title="@string/send_mail"
         app:showAsAction="never" />
 </menu>
