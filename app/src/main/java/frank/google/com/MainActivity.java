@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private Button btnPhoto;
     String currentPhotoPath;
+    private int mNewPosition;
+    private boolean isCancelling;
 
     /**
      *  CAMERA
@@ -131,10 +133,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isCancelling) {
+            if (isNewNote) {
+                DataManager.getInstance().removeNote(mNewPosition);
+            }
+        } else {
+            saveNote();
+        }
+    }
 
+    private void saveNote() {
+        mNote.setCourse((CourseInfo) mSpinnerCourses.getSelectedItem());
+        mNote.setTitle(mTextNoteTitle.getText().toString());
+        mNote.setText(mTextNoteText.getText().toString());
+    }
 
     private void displayNote(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
@@ -149,9 +166,17 @@ public class MainActivity extends AppCompatActivity {
         int position = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
         isNewNote = position == POSITION_NOT_SET;
 
-        if (!isNewNote) {
+        if (isNewNote) {
+            createNewNote();
+        } else {
             mNote = DataManager.getInstance().getNotes().get(position);
         }
+    }
+
+    private void createNewNote() {
+        DataManager dataManager = DataManager.getInstance();
+        mNewPosition = dataManager.createNewNote();
+        mNote = dataManager.getNotes().get(mNewPosition);
     }
 
     @Override
@@ -172,6 +197,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_send_mail) {
             sendEmail();
             return true;
+        } else if (id == R.id.action_cancel){
+            isCancelling = true;
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
