@@ -32,6 +32,9 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     public static final String NOTE_POSITION = "frank.google.com.NOTE_POSITION";
+    public static final String ORIGINAL_NOTE_COURSE_ID = "frank.google.com.ORIGINAL_NOTE_COURSE_ID";
+    public static final String ORIGINAL_NOTE_TITLE = "frank.google.com.ORIGINAL_NOTE_TITLE";
+    public static final String ORIGINAL_NOTE_TEXT = "frank.google.com.ORIGINAL_NOTE_TEXT";
     public static final int POSITION_NOT_SET = -1;
     private NoteInfo mNote;
     private boolean isNewNote;
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     String currentPhotoPath;
     private int mNewPosition;
     private boolean isCancelling;
+    private String mOriginalNoteCourseId;
+    private String mOriginalNoteTitle;
+    private String mOriginalNoteText;
 
     /**
      *  CAMERA
@@ -118,6 +124,12 @@ public class MainActivity extends AppCompatActivity {
         mSpinnerCourses.setAdapter(adapterCourses);
 
         readDisplayStateValues();
+        if (savedInstanceState == null) {
+            saveOriginalNoteValues();
+        } else {
+            restoreOriginalNoteValues(savedInstanceState);
+        }
+
 
         mTextNoteTitle = findViewById(R.id.text_note_title);
         mTextNoteText = findViewById(R.id.text_note_text);
@@ -135,16 +147,47 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void restoreOriginalNoteValues(Bundle savedInstanceState) {
+        mOriginalNoteCourseId = savedInstanceState.getString(ORIGINAL_NOTE_COURSE_ID);
+        mOriginalNoteTitle = savedInstanceState.getString(ORIGINAL_NOTE_TITLE);
+        mOriginalNoteText = savedInstanceState.getString(ORIGINAL_NOTE_TEXT);
+    }
+
+    private void saveOriginalNoteValues() {
+        if (isNewNote)
+            return;
+            mOriginalNoteCourseId = mNote.getCourse().getCourseId();
+            mOriginalNoteTitle = mNote.getTitle();
+            mOriginalNoteText = mNote.getText();
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
         if (isCancelling) {
             if (isNewNote) {
                 DataManager.getInstance().removeNote(mNewPosition);
+            } else {
+                storePreviousNoteValues();
             }
         } else {
             saveNote();
         }
+    }
+
+    private void storePreviousNoteValues() {
+        CourseInfo courseInfo = DataManager.getInstance().getCourse(mOriginalNoteCourseId);
+        mNote.setCourse(courseInfo);
+        mNote.setTitle(mOriginalNoteTitle);
+        mNote.setText(mOriginalNoteText);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ORIGINAL_NOTE_COURSE_ID, mOriginalNoteCourseId);
+        outState.putString(ORIGINAL_NOTE_TITLE,mOriginalNoteTitle);
+        outState.putString(ORIGINAL_NOTE_TEXT,mOriginalNoteText);
     }
 
     private void saveNote() {
