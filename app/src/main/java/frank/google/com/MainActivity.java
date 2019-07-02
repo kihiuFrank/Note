@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private Button btnPhoto;
     String currentPhotoPath;
-    private int mNewPosition;
+    private int mNotePosition;
     private boolean isCancelling;
     private String mOriginalNoteCourseId;
     private String mOriginalNoteTitle;
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         if (isCancelling) {
             if (isNewNote) {
-                DataManager.getInstance().removeNote(mNewPosition);
+                DataManager.getInstance().removeNote(mNotePosition);
             } else {
                 storePreviousNoteValues();
             }
@@ -218,8 +218,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNewNote() {
         DataManager dataManager = DataManager.getInstance();
-        mNewPosition = dataManager.createNewNote();
-        mNote = dataManager.getNotes().get(mNewPosition);
+        mNotePosition = dataManager.createNewNote();
+        mNote = dataManager.getNotes().get(mNotePosition);
     }
 
     @Override
@@ -243,9 +243,31 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_cancel){
             isCancelling = true;
             finish();
+        } else if (id == R.id.action_next) {
+            moveNext();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_next);
+        int lastNoteindex = DataManager.getInstance().getNotes().size() -1;
+        item.setEnabled(mNotePosition < lastNoteindex);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void moveNext() {
+        saveNote();
+
+        ++mNotePosition;
+        mNote = DataManager.getInstance().getNotes().get(mNotePosition);
+
+        saveOriginalNoteValues();
+        displayNote(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
+
+        invalidateOptionsMenu();
     }
 
     private void sendEmail() {

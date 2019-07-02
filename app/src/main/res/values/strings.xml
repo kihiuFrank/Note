@@ -6,4 +6,10 @@
     <string name="note_title">Note Title</string>
     <string name="send_mail">Send as mail</string>
     <string name="button">Take a Photo</string>
+    <string name="title_activity_main2">Note Book</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">My Note Book</string>
+    <string name="nav_header_subtitle">frank@gmail.com</string>
+    <string name="nav_header_desc">Navigation header</string>
 </resources>
