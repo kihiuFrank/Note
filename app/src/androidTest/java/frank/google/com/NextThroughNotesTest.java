@@ -12,11 +12,15 @@ import org.junit.Test;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.*;
 
 /**
@@ -42,8 +46,14 @@ public class NextThroughNotesTest {
             onView(withId(R.id.text_note_title)).check(matches(withText(note.getTitle())));
             onView(withId(R.id.text_note_text)).check(matches(withText(note.getText())));
 
-            onView(withId(R.id.action_next)).perform(click());
+            if (index < notes.size() -1)
+                onView(allOf(withId(R.id.action_next), isEnabled())).perform(click());
+
         }
+
+
+        onView(withId(R.id.action_next)).check(matches(not(isEnabled())));
+        pressBack();
     }
 
 }
