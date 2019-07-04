@@ -22,14 +22,27 @@
                 android:id="@+id/text_course"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="@string/textview"
                 android:textAlignment="center"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
-                android:textColor="@android:color/black"
+                android:textAppearance="@style/CourseTitle"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/todo_course"
+                android:tint="@color/orange"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_course"
+                app:srcCompat="@drawable/ic_menu_slideshow" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
