@@ -6,6 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!--<item name="editTextStyle">@style/DefaultEditText</item>-->
+    </style>
+    
+    <style name="DefaultEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColorHint">#00293b</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
